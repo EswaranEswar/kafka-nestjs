@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  redpanda:
+    image: vectorized/redpanda:latest
+    container_name: redpanda
+    ports:
+      - "9092:9092"   # Kafka API
+      - "9644:9644"   # Admin API
+      - "8081:8081"   # Schema Registry (optional)
+    command:
+      - redpanda
+      - start
+      - --overprovisioned
+      - --smp 1
+      - --memory 1G
+      - --reserve-memory 0M
+      - --node-id 0
+      - --check=false
+      - --kafka-addr PLAINTEXT://0.0.0.0:9092
+      - --advertise-kafka-addr PLAINTEXT://localhost:9092
+    volumes:
+      - redpanda-data:/var/lib/redpanda
+
+volumes:
+  redpanda-data:
